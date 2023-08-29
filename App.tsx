@@ -70,13 +70,16 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleBiometricAuth = async () => {
+    try {
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: "Login with Biometrics",
         fallbackLabel: "Enter Password",
       });
 
       setIsAuthenticated(result.success);
-    
+    } catch (error) {
+      throw new Error(`Something went wrong in handleBiometricAuth: ${error}`);
+    }
   };
 
   useEffect(() => {
