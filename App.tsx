@@ -1,6 +1,6 @@
-import { useReducer } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, SafeAreaView } from "react-native";
+import * as LocalAuthentication from "expo-local-authentication";
+import { useEffect, useReducer, useState } from "react";
+import { StyleSheet, View, SafeAreaView, Text } from "react-native";
 
 import AddTask from "./components/AddTask";
 import TaskList, { Task } from "./components/TaskList";
@@ -9,7 +9,6 @@ type Action =
   | { type: "added"; id: number; text: string }
   | { type: "changed"; task: Task }
   | { type: "deleted"; id: number };
-
 
 const initialState: Task[] = [];
 
@@ -68,16 +67,37 @@ export default function App() {
     });
   }
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleBiometricAuth = async () => {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Login with Biometrics",
+        fallbackLabel: "Enter Password",
+      });
+
+      setIsAuthenticated(result.success);
+    
+  };
+
+  useEffect(() => {
+    handleBiometricAuth();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.paddingsContainer}>
-        <StatusBar style="auto" />
-        <AddTask onAddTask={handleAddTask} />
-        <TaskList
-          tasks={tasks}
-          onChangeTask={handleChangeTask}
-          onDeleteTask={handleDeleteTask}
-        />
+        {isAuthenticated ? (
+          <>
+            <AddTask onAddTask={handleAddTask} />
+            <TaskList
+              tasks={tasks}
+              onChangeTask={handleChangeTask}
+              onDeleteTask={handleDeleteTask}
+            />
+          </>
+        ) : (
+          <Text>Access denied</Text>
+        )}
       </View>
     </SafeAreaView>
   );

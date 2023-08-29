@@ -15,7 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Todo List uses the camera to scan barcodes on event tickets.",
+        "NSFaceIDUsageDescription": "Todo List needs to use Face ID / Touch ID to authenticate you"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +29,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+        }
+      ]
+    ]
   }
 }

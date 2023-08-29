@@ -96,6 +96,7 @@ function Task({ task, onChange, onDelete }: TaskProps) {
             done: value,
           });
         }}
+        testID={`checkbox-${task.id}`}
       />
       {taskContent}
       <Button

@@ -16,7 +16,13 @@ export default function AddTask({ onAddTask }: AddTaskProps) {
       <Input
         placeholder="Add task..."
         value={text}
-        onChangeText={setText}
+        onChangeText={(value) => {
+          if (value === " ") {
+            setText(value.trim());
+          } else {
+            setText(value);
+          }
+        }}
         wrapperStyles={styles.inputWrapper}
       />
       <Button
